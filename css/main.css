@@ -200,3 +200,8 @@ body {
   border: none;
   cursor: pointer;
 }
+
+/* 비주얼 */
+.swiper-slide source {
+  width: 100vw;
+}
