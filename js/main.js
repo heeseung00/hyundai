@@ -58,9 +58,68 @@ window.addEventListener("load", function () {
   nav.addEventListener("mouseleave", () => {
     nav.classList.remove("nav-active");
   });
+
   // =======================비주얼 기능
+  // visual
+
+  // 비디오 항목 체크 (video태그로 파악)
+  // 모든비디오 태그를 변수에 저장
+  let videos = this.document.querySelectorAll(".swVisual video");
+  // console.log(videos);
+  // 비디오 재생시간 체크
+  // 비디오의 재생 시간을 보관할 배열을 생성
+  let videosTimeArr = [];
+  // 비디오 재생 시간을 배열에 저장하는 반복문을 작성
+  for (let i = 0; i < videos.length; i++) {
+    // console.log(videos[0].duration);
+    videosTimeArr[i] = Math.ceil(videos[i].duration);
+  }
+  //첫번째 비디오 자동실행
+  let videoIndex = 0;
+  videos[videoIndex].play();
+
+  let videoIndex1 = 1;
+  videos[videoIndex1].play();
+
   // visual slide
   let swVisual = new Swiper(".swVisual", {
     loop: true,
   });
+  // 슬라이드 변경 이벤트시 처리
+  swVisual.on("slideChange", function () {
+    // 진행중인 비디오 멈춤
+    videos[videoIndex].pause();
+    // 다음 화면 보이는 swiper 슬라이드 번호
+    // console.log(swVisual.activeIndex);
+    // console.log(swVisual.realIndex);
+    videoIndex = swVisual.realIndex;
+    // 다음 비디오를 재생
+    // 처음으로 비디오 플리이헤드 이동
+    // currentTime 속성  HTML5 <video>요소에서 사용되는 속성,
+    // 현재 비디오 재생 위치를 나타냅니다.
+    // 이속성을 조작하여 재생 위치를 변경
+    // 다음 슬라이드로 이동할때 마다 비디오를 처음 부터 재생하기 위해서
+
+    videos[videoIndex].currentTime = 0;
+    const playPromise = videos[videoIndex].play();
+    if (playPromise !== undefined) {
+      playPromise.then((_) => {}).catch((error) => {});
+    }
+  });
+  //비디오 영상이 플레이
+  let bars = this.document.querySelectorAll(".bar");
+  console.log(bars);
+  let barScaleW = 0;
+
+  let videoTimer;
+  function videoReset() {
+    barScaleW = 0;
+    for (let i = 0; i < bars.length; i++) {
+      let tag = bars[i];
+      tag.style.width = `${barScaleW}%`;
+    }
+    // 활성화 될 bar 클래스 선택
+    let activeBar = bars[videoIndex];
+    console.log(activeBar);
+  }
 });
